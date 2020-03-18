@@ -1,0 +1,51 @@
+
+body {
+   font-family: Arial, Verdana, sans-serif;
+   background: #FFFFFF;
+}
+
+h1, h2, h3 {
+    font-family: Geneva, Arial, Helvetica, serif;
+}
+
+h4, h5, h6 {
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+
+ol, ul, li {
+    font-family: Georgia, Arial, cursive;
+}
+
+/* Источники информации
+https://bootstrap-4.ru/docs/4.4/components/forms/
+https://habr.com/ru/company/ruvds/blog/350758/
+https://www.color-hex.com/color/ffffff
+https://myrusakov.ru/css-height-width-block.html
+https://myrusakov.ru/css-bootstrap4-verstka.html !!!!!!!!!!!!!!!!!
+*/
+div {
+  background: #FFFFFF;
+
+}
+
+.class-name {
+    color: red;
+    line-height: 2em;
+    background-color: green;
+}
+
+/* подчеркивание ссылок при наведении */
+.link-color:hover {
+    display: block;
+    border-bottom: 2px solid #5094f2;
+}
+
+/* ссылки меню  */
+.link-color {
+    color: #6c6c6c;
+    border-bottom: 2px solid #fff;
+    display: block;
+}
+
+
+
