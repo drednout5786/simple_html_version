@@ -1,12 +1,22 @@
 # https://ru.wikibooks.org/wiki/Flask
 
 from flask import Flask, render_template, request
+
 from api_hh_skills import parsing_skills
 from api_hh_salary import parsing_av_salary
-import sqlite3 as lite
-import sys
+from db_sqlalchemy_creator import Vacancy_info, City, Vacancy, Contacts
+
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import exc
+
+from datetime import datetime
 
 app = Flask(__name__)
+
+engine = create_engine('sqlite:///orm1.sqlite', echo=False)
+Base = declarative_base()
 
 @app.route('/')
 def main_index():
@@ -40,26 +50,35 @@ def parsing_answer():
          for i in range(len_skills-1):
             skills_info = skills_info + skills_list[i] + ', '
          skills_info = skills_info + skills_list[len_skills-1]
-    # Наполнение формы для выдачи информацией
+
+    # Наполнение шаблона для передачи информации на сайт
      data = {
              'city': city,
              'vacancy': vacancy,
              'av_salary': av_salary,
              'skills_info': skills_info}
+
+     # Загрузка полученной информации в базу SQLAlchemy
      try:
-         connect = lite.connect('vacancy_db.db')
-         with connect:
-             cur = connect.cursor()
-             # Подсчет количества существующих записей в базе
-             cur.execute("SELECT Count() FROM vacancies")
-             numberOfRows = cur.fetchone()[0]
-             # Вставка данных в базу
-             cur.execute("INSERT INTO vacancies VALUES(?,?,?,?,?)", (
-             numberOfRows+1, city, vacancy, av_salary, skills_info))
-             # connect.close()
-     except lite.Error as e:
-         print(f"Error {e.args[0]}:")
-         sys.exit(1)
+         session.add(City(city))
+         session.commit()
+     except exc.IntegrityError:
+         session.rollback()
+
+     try:
+         session.add(Vacancy(vacancy))
+         session.commit()
+     except exc.IntegrityError:
+         session.rollback()
+
+     try:
+         session.add(Vacancy_info(session.query(City).filter(City.city == city).first().id,
+                                  session.query(Vacancy).filter(Vacancy.vacancy == vacancy).first().id,
+                                  av_salary, skills_info))
+         session.commit()
+     except exc.IntegrityError:
+         session.rollback()
+
      return render_template('parsing_answer.html', data=data)
 
 @app.route('/contacts')
@@ -72,22 +91,20 @@ def contacts_ok():
      name = request.form['name']
      post_mail = request.form['post_mail']
      message = request.form['message'].strip()
+
+     # Загрузка полученной информации в базу SQLAlchemy + сегодняшняя дата
      try:
-         connect = lite.connect('contacts_db.db')
-         with connect:
-             cur = connect.cursor()
-             # Подсчет количества существующих записей в базе
-             cur.execute("SELECT Count() FROM contacts")
-             numberOfRows = cur.fetchone()[0]
-             # Вставка данных в базу
-             cur.execute("INSERT INTO contacts VALUES(?,?,?,?,?)", (numberOfRows + 1, email, name, post_mail, message))
-             # connect.close()
-     except lite.Error as e:
-        print(f"Error {e.args[0]}:")
-        sys.exit(1)
+         session.add(Contacts(email, name, post_mail, message, datetime.today()))
+         session.commit()
+     except exc.IntegrityError:
+         session.rollback()
+
      return render_template('contacts_ok.html', message=message)
 
 if __name__ == "__main__":
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
     # app.run()  # в режиме отладки на одном компьютере
     # хорош для начала разработки на локальном сервере. Но это потребует ручного перезапуска сервера после каждого изменения в коде.
     # app.run(host='0.0.0.0') # сделать сервер общедоступным в локальной сети
