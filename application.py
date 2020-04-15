@@ -94,6 +94,7 @@ def contacts_ok():
      name = request.form['name']
      post_mail = request.form['post_mail']
      message = request.form['message'].strip()
+     
      # Загрузка полученной информации в базу SQLAlchemy + сегодняшняя дата
      try:
          session.add(Contacts(email, name, post_mail, message, datetime.today()))
