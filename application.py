@@ -37,8 +37,11 @@ def parsing_answer():
 
      # Получение информации по средней зарплате путем парсинга сайта
      av_salary = round(parsing_av_salary(city, vacancy), 2)
-     if av_salary == 0:
-         av_salary = 'Нет информации'
+     if av_salary <= 0:
+         av_salary_str = 'Нет информации'
+         av_salary = 0
+     else:
+         av_salary_str = av_salary
 
      # Получение информации об основных навыках путем парсинга сайта
      skills_list = parsing_skills(city, vacancy)
@@ -55,7 +58,7 @@ def parsing_answer():
      data = {
              'city': city,
              'vacancy': vacancy,
-             'av_salary': av_salary,
+             'av_salary': av_salary_str,
              'skills_info': skills_info}
 
      # Загрузка полученной информации в базу SQLAlchemy
@@ -92,7 +95,7 @@ def contacts_ok():
      post_mail = request.form['post_mail']
      message = request.form['message'].strip()
 
-     # Загрузка полученной информации в базу SQLAlchemy + сегодняшняя дата
+      # Загрузка полученной информации в базу SQLAlchemy + сегодняшняя дата
      try:
          session.add(Contacts(email, name, post_mail, message, datetime.today()))
          session.commit()
@@ -109,3 +112,5 @@ if __name__ == "__main__":
     # хорош для начала разработки на локальном сервере. Но это потребует ручного перезапуска сервера после каждого изменения в коде.
     # app.run(host='0.0.0.0') # сделать сервер общедоступным в локальной сети
     app.run(debug=True) # сервер будет сам перегружаться после каждого изменения в коде
+
+
