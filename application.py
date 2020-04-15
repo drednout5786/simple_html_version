@@ -43,7 +43,7 @@ def parsing_answer():
      else:
          av_salary_str = av_salary
 
-         # Получение информации об основных навыках путем парсинга сайта
+     # Получение информации об основных навыках путем парсинга сайта
      skills_list = parsing_skills(city, vacancy)
      len_skills = len(skills_list)
      if len_skills == 0:
@@ -54,7 +54,7 @@ def parsing_answer():
             skills_info = skills_info + skills_list[i] + ', '
          skills_info = skills_info + skills_list[len_skills-1]
 
-    # Наполнение шаблона для передачи информации на сайт
+     # Наполнение шаблона для передачи информации на сайт
      data = {
              'city': city,
              'vacancy': vacancy,
@@ -103,12 +103,7 @@ def contacts_ok():
 
      return render_template('contacts_ok.html', message=message)
 
-def get_memory_size():
-    process = psutil.Process(os.getpid())
-    return process.memory_info().rss/100
-
 if __name__ == "__main__":
-
 
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
