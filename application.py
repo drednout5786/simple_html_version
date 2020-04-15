@@ -54,7 +54,7 @@ def parsing_answer():
             skills_info = skills_info + skills_list[i] + ', '
          skills_info = skills_info + skills_list[len_skills-1]
 
-     # Наполнение шаблона для передачи информации на сайт
+    # Наполнение шаблона для передачи информации на сайт
      data = {
              'city': city,
              'vacancy': vacancy,
@@ -104,7 +104,6 @@ def contacts_ok():
      return render_template('contacts_ok.html', message=message)
 
 if __name__ == "__main__":
-
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
