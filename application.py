@@ -12,8 +12,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 
 from datetime import datetime
-import psutil
-import os
 
 app = Flask(__name__)
 
@@ -97,21 +95,11 @@ def contacts_ok():
      post_mail = request.form['post_mail']
      message = request.form['message'].strip()
 
-     # print('Функция без Slots')
-     # mem_before = get_memory_size()
-     # print('Исп. память до вып. функции: ' + str(mem_before))
-
-     # Загрузка полученной информации в базу SQLAlchemy + сегодняшняя дата
      try:
          session.add(Contacts(email, name, post_mail, message, datetime.today()))
          session.commit()
      except exc.IntegrityError:
          session.rollback()
-
-     # mem_after = get_memory_size()
-     # print('Исп. память после вып. функции: ' + str(mem_after))
-     # RAM_size = mem_after - mem_before
-     # print("Объем оперативной памяти использованный для выполнения функции: ", RAM_size, '\n')
 
      return render_template('contacts_ok.html', message=message)
 
