@@ -19,7 +19,7 @@
      <!-- Header -->
     <div class="container">
         <nav class="navbar navbar-expand-md">
-            <img class="img_fluid" alt="" src="{{url_for('static', filename='ranepa.jpeg')}}" height="70rem">
+            <img class="img_fluid" alt="" src="{{url_for('static', filename='img/ranepa.jpeg')}}" height="70rem">
 <!--            <img class="img_fluid" alt="" src="static/img/ranepa.jpeg" height="70rem">-->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="nav">
@@ -44,7 +44,7 @@
     <section class="home container">
         <div class="row mt-5">
             <div class="col-lg-6 mt-5 py-5 pl-5">
-                <img class="img-fluid" alt="" src="{{url_for('static', filename='03.jpg')}}">
+                <img class="img-fluid" alt="" src="{{url_for('static', filename='img/03.jpg')}}">
 <!--                <img class="img-fluid" alt="" src="static/img/03.jpg" height="7rem">-->
             </div>
             <div class="col-lg-6 my-auto">
@@ -54,7 +54,10 @@
                 <form action = '/parsing_answer' method = 'post' class="form-inline my-2 my-lg-0">
                 <input type = 'text' name = 'city' class="form-control mr-sm-2" placeholder="Город" required/>
                 <input type = 'text' name = 'vacancy' class="form-control mr-sm-2" placeholder="Название вакансии" required/>
-                <button type = 'submit' class="btn btn-outline-primary my-2 my-sm-0">Найти</button>
+                <button type = 'submit' class="btn btn-outline-primary my-2 my-sm-0" data-toggle="tooltip"
+                        data-placement="bottom" title="Отправка запроса к базе hh.ru">Найти
+                </button>
+
                 </form>
             </div>
         </div>
